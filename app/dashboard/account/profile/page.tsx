@@ -71,7 +71,7 @@ export default function ProfilePage() {
                 </span>
                 <input
                   type="text"
-                  defaultValue="Sarah Jessie"
+                  defaultValue="Client User"
                   className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
                   placeholder="Enter your full name"
                 />
@@ -87,7 +87,7 @@ export default function ProfilePage() {
                 </span>
                 <input
                   type="email"
-                  defaultValue="Sarah@gmail.com"
+                  defaultValue="client@nexuspbs.net"
                   className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
                   placeholder="Enter your email"
                 />
