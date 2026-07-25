@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Input } from '@/components/shared/Input';
 import { Button } from '@/components/shared/Button';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -38,26 +39,26 @@ const eyeOffIcon = (
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('admin@demo.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent, demoEmail?: string, demoPass?: string) => {
-    e?.preventDefault();
-    const finalEmail = demoEmail || email;
-    const finalPass = demoPass || password;
-
-    if (finalEmail === 'admin@demo.com' && finalPass === 'admin123') {
-      router.push('/dashboard');
-    } else {
-      alert('Invalid credentials');
-    }
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push('/dashboard');
   };
 
   return (
-    <div className="min-h-screen bg-bg flex">
-      {/* Left side background image */}
-      <div className="w-[983px] shrink-0 relative overflow-hidden">
+    <div className="min-h-screen bg-bg flex relative">
+      {/* Mobile: full-screen background image with dark overlay */}
+      <div
+        className="absolute inset-0 bg-cover bg-center lg:hidden"
+        style={{ backgroundImage: 'url(/assets/login.jpg)' }}
+      />
+      <div className="absolute inset-0 bg-black/40 lg:hidden" />
+
+      {/* Desktop: left side background image with Jamaica/Nexus overlay */}
+      <div className="hidden lg:block w-[983px] shrink-0 relative overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -66,16 +67,38 @@ export default function LoginPage() {
             backgroundPosition: 'center',
           }}
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/10 to-transparent flex flex-col justify-center px-20 lg:px-24 py-16">
+          <p className="text-gold-mid text-sm font-semibold tracking-[0.15em] uppercase mb-3">
+            Nexus Property Verification
+          </p>
+          <h2 className="text-white text-[38px] font-bold leading-[1.2] mb-3">
+            Jamaica's Trusted<br />Inspection Partner
+          </h2>
+          <p className="text-white/70 text-[14px] leading-relaxed max-w-sm">
+            Professional property verification, local representation, and inspection services across Jamaica.
+          </p>
+        </div>
       </div>
 
       {/* Right side form */}
-      <div className="flex-1 flex items-center justify-center px-16">
-        <div className="w-full max-w-[520px]">
-          <div className="mb-10 text-center">
-            <h1 className="text-[38px] font-bold text-white leading-[1.2] mb-2">Welcome Back</h1>
-            <p className="text-dark-200 text-[15px]">Enter your credentials to access your dashboard.</p>
+      <div className="flex-1 flex items-start lg:items-center justify-center px-4 sm:px-8 lg:px-16 relative z-10 pt-10 sm:pt-16 lg:pt-0 pb-8 lg:pb-0">
+        <div className="w-full max-w-[520px] bg-dark-600/90 lg:bg-transparent backdrop-blur-sm rounded-[20px] p-8 lg:p-0">
+          <div className="flex justify-center mb-6">
+            <Image
+              src="/assets/sidebar-logo.png"
+              alt="Nexus"
+              width={100}
+              height={150}
+              priority
+              unoptimized
+              className="object-contain"
+            />
           </div>
-          <form className="flex flex-col gap-5" onSubmit={handleLogin}>
+          <div className="mb-8 text-center">
+            <h1 className="text-[38px] font-bold text-white leading-[1.2] mb-2">Welcome to Your Client Portal</h1>
+            <p className="text-dark-200 text-[15px]">Sign in to manage your properties, reports, and inspections.</p>
+          </div>
+          <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <Input
               icon={envelopeIcon}
               label="Email"
@@ -118,7 +141,6 @@ export default function LoginPage() {
             >
               Secure Login
             </Button>
-
           </form>
         </div>
       </div>

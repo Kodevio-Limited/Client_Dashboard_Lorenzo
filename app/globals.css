@@ -21,7 +21,7 @@
   --color-dark-border: #4B4B4B;
   --color-dark-text: #FFFFFF;
   --color-dark-text-secondary: #989898;
-  --font-sans: 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'Geist Mono', monospace;
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -30,7 +30,6 @@
 }
 
 body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-white);
 }
