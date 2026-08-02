@@ -87,9 +87,9 @@ export default function ProfilePage() {
                 </span>
                 <input
                   type="email"
-                  defaultValue="client@nexuspbs.net"
+                  defaultValue="info@nexuspbs.net"
                   className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
-                  placeholder="Enter your email"
+                  placeholder="you@example.com"
                 />
               </div>
             </div>
@@ -103,9 +103,9 @@ export default function ProfilePage() {
                 </span>
                 <input
                   type="tel"
-                  defaultValue="+1 (555) 123-4567"
+                  defaultValue="(561) 639-8772"
                   className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
-                  placeholder="Enter your phone number"
+                  placeholder="(876) 555-0199"
                 />
               </div>
             </div>
