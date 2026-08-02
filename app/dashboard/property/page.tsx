@@ -54,10 +54,10 @@ export default function PropertyPage() {
   return (
     <>
       <Header />
-      <div className="px-8 pt-[50px] pb-[14px]">
-        <div className="flex flex-col items-start gap-[10px] mb-6">
-          <h2 className="text-[24px] font-bold text-white leading-[1.3] tracking-wide">My Properties</h2>
-          <span className="text-[14px] text-dark-200 leading-[1.3]">
+      <div className="px-4 sm:px-6 lg:px-8 pt-8 sm:pt-[50px] pb-3 sm:pb-[14px]">
+        <div className="flex flex-col items-start gap-2 sm:gap-[10px] mb-6">
+          <h2 className="text-[20px] sm:text-[24px] font-bold text-white leading-[1.3] tracking-wide">My Properties</h2>
+          <span className="text-[12px] sm:text-[14px] text-dark-200 leading-[1.3]">
             Select a property below to view its reports, media, and history
           </span>
         </div>
@@ -66,10 +66,10 @@ export default function PropertyPage() {
           {properties.map((property) => (
             <div
               key={property.id}
-              className="bg-dark-600 rounded-[8px] p-6 flex items-center justify-between gap-6"
+              className="bg-dark-600 rounded-[8px] p-4 sm:p-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
             >
-              <div className="flex items-center gap-6">
-                <div className="w-[88px] h-[88px] rounded-[6px] overflow-hidden shrink-0 relative">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-[6px] overflow-hidden shrink-0 relative">
                   <Image
                     src={property.image}
                     alt={property.name}
@@ -80,15 +80,15 @@ export default function PropertyPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <h3 className="text-[20px] font-bold text-white leading-[1.2]">
+                  <h3 className="text-[18px] sm:text-[20px] font-bold text-white leading-[1.2]">
                     {property.name}
                   </h3>
                   <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 text-dark-200 text-[14px]">
+                    <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
                       <span className="text-dark-300">{pinIcon}</span>
                       <span>{property.address}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-dark-200 text-[14px]">
+                    <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
                       <span className="text-dark-300">{calendarIcon}</span>
                       <span>Inspected: {property.date}</span>
                     </div>
@@ -97,10 +97,10 @@ export default function PropertyPage() {
               </div>
 
               {/* Action buttons on the right */}
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
                 <Link
                   href="/dashboard/reports"
-                  className="rounded-[4px] px-6 py-3 text-[14px] font-semibold text-bg hover:brightness-110 transition-all flex items-center gap-2"
+                  className="rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-bg hover:brightness-110 transition-all flex items-center gap-2 flex-1 sm:flex-none justify-center"
                   style={{
                     background: 'linear-gradient(180deg, #FCE688 0%, #D1A736 50%, #946E18 100%)',
                   }}
@@ -110,14 +110,14 @@ export default function PropertyPage() {
                 </Link>
                 <Link
                   href="/dashboard/property/media"
-                  className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-6 py-3 text-[14px] font-semibold text-white transition-colors flex items-center gap-2"
+                  className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-white transition-colors flex items-center gap-2 flex-1 sm:flex-none justify-center"
                 >
                   {photoIcon}
                   <span>Media</span>
                 </Link>
                 <Link
                   href="/dashboard/property/history"
-                  className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-6 py-3 text-[14px] font-semibold text-white transition-colors flex items-center gap-2"
+                  className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-white transition-colors flex items-center gap-2 flex-1 sm:flex-none justify-center"
                 >
                   {clockIcon}
                   <span>History</span>
