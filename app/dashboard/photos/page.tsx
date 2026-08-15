@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
+import { useMediaQuery } from '@/lib/api/hooks/useMediaHooks';
 
 const playIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white" stroke="none">
@@ -9,17 +10,13 @@ const playIcon = (
   </svg>
 );
 
-const mediaItems = [
-  { id: '1', label: 'Image', title: 'Front Elevation', property: 'Villa Kingston', url: '/assets/photo-1.svg', type: 'image' },
-  { id: '2', label: 'Image', title: 'Interior Living', property: 'Villa Kingston', url: '/assets/photo-2.svg', type: 'image' },
-  { id: '3', label: 'Video', title: 'Video Tour', property: 'Villa Kingston', url: '/assets/photo-3.svg', type: 'video' },
-];
-
 export default function PhotosPage() {
+  const { data: mediaItems, isLoading, isError, error } = useMediaQuery();
+
   return (
     <>
       <Header />
-      <div className="px-8 pt-[50px] pb-[14px]">
+      <div className="px-4 sm:px-6 lg:px-8 pt-8 sm:pt-[50px] pb-3 sm:pb-[14px]">
         <div className="flex flex-col items-start gap-[10px] mb-6">
           <h2 className="text-[24px] font-bold text-white leading-[1.3] tracking-wide">Photos & Videos</h2>
           <span className="text-[14px] text-dark-200 leading-[1.3]">
@@ -27,50 +24,81 @@ export default function PhotosPage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {mediaItems.map((item) => (
-            <div
-              key={item.id}
-              className="group relative aspect-[4/3] rounded-[6px] overflow-hidden bg-dark-500 cursor-pointer flex flex-col justify-between p-6 border border-dark-400/20"
-            >
-              {/* Background Image */}
-              <Image
-                src={item.url}
-                alt={item.title}
-                fill
-                className="object-cover transition-transform group-hover:scale-102"
-                unoptimized
-              />
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="aspect-[4/3] rounded-[6px] bg-dark-600 animate-pulse" />
+            ))}
+          </div>
+        )}
 
-              {/* Overlay with semi-translucent black to ensure text readability */}
-              <div className="absolute inset-0 bg-black/45 transition-colors group-hover:bg-black/60 z-0" />
+        {isError && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-md text-sm">
+            {(error as Error)?.message || 'Failed to load media assets'}
+          </div>
+        )}
 
-              {/* Card content aligned inside the overlay */}
-              <div className="relative z-10 flex flex-col justify-between h-full w-full">
-                <div>
-                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-wider">
-                    {item.label}
-                  </span>
-                  <h3 className="text-[20px] font-bold text-white mt-1 leading-tight">
-                    {item.type === 'video' ? item.title : item.title}
-                  </h3>
-                </div>
+        {!isLoading && !isError && mediaItems && mediaItems.length === 0 && (
+          <div className="bg-dark-600 rounded-[8px] p-8 text-center text-dark-200 text-sm">
+            No inspection photos or videos found for your properties.
+          </div>
+        )}
 
-                {item.type === 'video' && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/20">
-                      {playIcon}
+        {!isLoading && !isError && mediaItems && mediaItems.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {mediaItems.map((item, idx) => {
+              const fileUrl = item.attachment?.fileUrl || item.fileUrl || `/assets/photo-${(idx % 3) + 1}.svg`;
+              const isVideo = item.type === 'VIDEO';
+              const label = isVideo ? 'Video' : 'Image';
+              const title = item.title || (isVideo ? 'Inspection Video' : 'Inspection Photo');
+              const propertyName = item.property?.name || 'Property Media';
+
+              return (
+                <div
+                  key={item.id}
+                  className="group relative aspect-[4/3] rounded-[6px] overflow-hidden bg-dark-500 cursor-pointer flex flex-col justify-between p-6 border border-dark-400/20"
+                  onClick={() => window.open(fileUrl, '_blank')}
+                >
+                  {/* Background Image */}
+                  <Image
+                    src={fileUrl}
+                    alt={title}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-102"
+                    unoptimized
+                  />
+
+                  {/* Overlay with semi-translucent black to ensure text readability */}
+                  <div className="absolute inset-0 bg-black/45 transition-colors group-hover:bg-black/60 z-0" />
+
+                  {/* Card content aligned inside the overlay */}
+                  <div className="relative z-10 flex flex-col justify-between h-full w-full">
+                    <div>
+                      <span className="text-[12px] uppercase font-bold text-white/60 tracking-wider">
+                        {label}
+                      </span>
+                      <h3 className="text-[20px] font-bold text-white mt-1 leading-tight">
+                        {title}
+                      </h3>
                     </div>
-                  </div>
-                )}
 
-                <span className="text-[14px] text-white/70 font-semibold mt-auto">
-                  {item.property}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+                    {isVideo && (
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/20">
+                          {playIcon}
+                        </div>
+                      </div>
+                    )}
+
+                    <span className="text-[14px] text-white/70 font-semibold mt-auto">
+                      {propertyName}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </>
   );

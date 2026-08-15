@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
+import { usePropertiesQuery } from '@/lib/api/hooks/usePropertyHooks';
 
 const pinIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -44,13 +45,18 @@ const clockIcon = (
   </svg>
 );
 
-const properties = [
-  { id: '1', name: 'Villa Kingston', address: 'Kingston, Jamaica', date: '2026-08-10', image: '/assets/photo-1.svg' },
-  { id: '2', name: 'Villa Kingston', address: 'Kingston, Jamaica', date: '2026-08-10', image: '/assets/photo-2.svg' },
-  { id: '3', name: 'Villa Kingston', address: 'Kingston, Jamaica', date: '2026-08-10', image: '/assets/photo-3.svg' },
-];
-
 export default function PropertyPage() {
+  const { data: properties, isLoading, isError, error } = usePropertiesQuery();
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return 'N/A';
+    try {
+      return new Date(dateStr).toISOString().split('T')[0];
+    } catch {
+      return dateStr;
+    }
+  };
+
   return (
     <>
       <Header />
@@ -62,70 +68,101 @@ export default function PropertyPage() {
           </span>
         </div>
 
-        <div className="flex flex-col gap-4">
-          {properties.map((property) => (
-            <div
-              key={property.id}
-              className="bg-dark-600 rounded-[8px] p-4 sm:p-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
-            >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-[6px] overflow-hidden shrink-0 relative">
-                  <Image
-                    src={property.image}
-                    alt={property.name}
-                    width={88}
-                    height={88}
-                    className="object-cover w-full h-full"
-                    unoptimized
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <h3 className="text-[18px] sm:text-[20px] font-bold text-white leading-[1.2]">
-                    {property.name}
-                  </h3>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
-                      <span className="text-dark-300">{pinIcon}</span>
-                      <span>{property.address}</span>
+        {isLoading && (
+          <div className="flex flex-col gap-4">
+            {[1, 2].map((i) => (
+              <div key={i} className="bg-dark-600 rounded-[8px] p-6 animate-pulse h-28" />
+            ))}
+          </div>
+        )}
+
+        {isError && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-md text-sm">
+            {(error as Error)?.message || 'Failed to load properties'}
+          </div>
+        )}
+
+        {!isLoading && !isError && properties && properties.length === 0 && (
+          <div className="bg-dark-600 rounded-[8px] p-8 text-center text-dark-200 text-sm">
+            No properties found registered under your client account.
+          </div>
+        )}
+
+        {!isLoading && !isError && properties && properties.length > 0 && (
+          <div className="flex flex-col gap-4">
+            {properties.map((property, idx) => {
+              const imageSrc =
+                property.attachments && property.attachments.length > 0
+                  ? property.attachments[0].fileUrl
+                  : `/assets/photo-${(idx % 3) + 1}.svg`;
+
+              const fullAddress = [property.parish, property.city].filter(Boolean).join(', ') || 'Jamaica';
+
+              return (
+                <div
+                  key={property.id}
+                  className="bg-dark-600 rounded-[8px] p-4 sm:p-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                    <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-[6px] overflow-hidden shrink-0 relative bg-dark-500">
+                      <Image
+                        src={imageSrc}
+                        alt={property.name}
+                        width={88}
+                        height={88}
+                        className="object-cover w-full h-full"
+                        unoptimized
+                      />
                     </div>
-                    <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
-                      <span className="text-dark-300">{calendarIcon}</span>
-                      <span>Inspected: {property.date}</span>
+                    <div className="flex flex-col gap-1.5">
+                      <h3 className="text-[18px] sm:text-[20px] font-bold text-white leading-[1.2]">
+                        {property.name}
+                      </h3>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
+                          <span className="text-dark-300">{pinIcon}</span>
+                          <span>{fullAddress}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
+                          <span className="text-dark-300">{calendarIcon}</span>
+                          <span>Next Visit: {formatDate(property.nextVisitDate)}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Action buttons on the right */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
-                <Link
-                  href="/dashboard/reports"
-                  className="rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-bg hover:brightness-110 transition-all flex items-center gap-2 flex-1 sm:flex-none justify-center"
-                  style={{
-                    background: 'linear-gradient(180deg, #FCE688 0%, #D1A736 50%, #946E18 100%)',
-                  }}
-                >
-                  {documentIcon}
-                  <span>Report</span>
-                </Link>
-                <Link
-                  href="/dashboard/property/media"
-                  className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-white transition-colors flex items-center gap-2 flex-1 sm:flex-none justify-center"
-                >
-                  {photoIcon}
-                  <span>Media</span>
-                </Link>
-                <Link
-                  href="/dashboard/property/history"
-                  className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-white transition-colors flex items-center gap-2 flex-1 sm:flex-none justify-center"
-                >
-                  {clockIcon}
-                  <span>History</span>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+                  {/* Action buttons on the right */}
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
+                    <Link
+                      href={`/dashboard/reports?propertyId=${property.id}`}
+                      className="rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-bg hover:brightness-110 transition-all flex items-center gap-2 flex-1 sm:flex-none justify-center"
+                      style={{
+                        background: 'linear-gradient(180deg, #FCE688 0%, #D1A736 50%, #946E18 100%)',
+                      }}
+                    >
+                      {documentIcon}
+                      <span>Report</span>
+                    </Link>
+                    <Link
+                      href={`/dashboard/property/media?propertyId=${property.id}`}
+                      className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-white transition-colors flex items-center gap-2 flex-1 sm:flex-none justify-center"
+                    >
+                      {photoIcon}
+                      <span>Media</span>
+                    </Link>
+                    <Link
+                      href={`/dashboard/property/history?propertyId=${property.id}`}
+                      className="bg-dark-400/50 hover:bg-dark-400 rounded-[4px] px-4 sm:px-6 py-2 sm:py-3 text-[13px] sm:text-[14px] font-semibold text-white transition-colors flex items-center gap-2 flex-1 sm:flex-none justify-center"
+                    >
+                      {clockIcon}
+                      <span>History</span>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </>
   );
