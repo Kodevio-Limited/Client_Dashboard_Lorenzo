@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import AccountNav from '@/components/account/AccountNav';
 import { Button } from '@/components/shared/Button';
 import Link from 'next/link';
+import { useProfileQuery, useUpdateProfileMutation } from '@/lib/api/hooks/useProfileHooks';
 
 const userIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#989898" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -33,100 +35,151 @@ const cameraIcon = (
 );
 
 export default function ProfilePage() {
+  const { data: profile, isLoading } = useProfileQuery();
+  const updateProfileMutation = useUpdateProfileMutation();
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+
+  useEffect(() => {
+    if (profile) {
+      setFirstName(profile.firstName || '');
+      setLastName(profile.lastName || '');
+      setEmail(profile.email || '');
+      setPhone(profile.phone || profile.client?.phone || '');
+    }
+  }, [profile]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateProfileMutation.mutate({
+      firstName,
+      lastName,
+      email,
+      phone,
+    });
+  };
+
   return (
     <>
       <Header />
-      <div className="px-8 pt-[50px] pb-[14px]">
+      <div className="px-4 sm:px-8 pt-[50px] pb-[14px]">
         <div className="flex flex-col items-start gap-[10px]">
           <h2 className="text-[24px] font-medium text-white leading-[1.3]">User Account</h2>
         </div>
       </div>
-      <div className="px-8 pb-[20px]">
+      <div className="px-4 sm:px-8 pb-[20px]">
         <AccountNav />
       </div>
 
       {/* Centered card container */}
-      <div className="px-8 pb-10 flex justify-center">
-        <div className="bg-dark-600 rounded-[8px] p-8 w-full max-w-2xl flex flex-col gap-6">
+      <div className="px-4 sm:px-8 pb-10 flex justify-center">
+        <div className="bg-dark-600 rounded-[8px] p-6 sm:p-8 w-full max-w-2xl flex flex-col gap-6">
 
-          {/* Photo upload container */}
+          {/* Photo container */}
           <div className="flex flex-col items-center gap-3">
             <div className="w-[120px] h-[120px] rounded-full bg-[#2B2B2B] border-2 border-dark-400 flex items-center justify-center relative cursor-pointer hover:border-gold-mid transition-colors group">
               {cameraIcon}
               <div className="absolute inset-0 rounded-full bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="text-[11px] text-white font-medium">Upload</span>
+                <span className="text-[11px] text-white font-medium">Avatar</span>
               </div>
             </div>
-            <span className="text-[12px] text-dark-200">Click to upload photo</span>
+            <span className="text-[12px] text-dark-200">Account Profile</span>
           </div>
 
-          {/* Full-width form fields */}
-          <form className="flex flex-col gap-5">
-            {/* Full Name field */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-dark-200">Full Name</label>
-              <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
-                <span className="shrink-0 flex items-center justify-center">
-                  {userIcon}
-                </span>
-                <input
-                  type="text"
-                  defaultValue="Client User"
-                  className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
-                  placeholder="Enter your full name"
-                />
+          {isLoading ? (
+            <div className="animate-pulse flex flex-col gap-4 h-64 bg-dark-500 rounded-md" />
+          ) : (
+            <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+              {/* First Name & Last Name field */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm text-dark-200">First Name</label>
+                  <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
+                    <span className="shrink-0 flex items-center justify-center">
+                      {userIcon}
+                    </span>
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
+                      placeholder="First name"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm text-dark-200">Last Name</label>
+                  <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
+                    <span className="shrink-0 flex items-center justify-center">
+                      {userIcon}
+                    </span>
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
+                      placeholder="Last name"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
 
-            {/* Email field */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-dark-200">Email Address</label>
-              <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
-                <span className="shrink-0 flex items-center justify-center">
-                  {mailIcon}
-                </span>
-                <input
-                  type="email"
-                  defaultValue="info@nexuspbs.net"
-                  className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
-                  placeholder="you@example.com"
-                />
+              {/* Email field */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm text-dark-200">Email Address</label>
+                <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
+                  <span className="shrink-0 flex items-center justify-center">
+                    {mailIcon}
+                  </span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
+                    placeholder="you@example.com"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Phone field */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-dark-200">Phone Number</label>
-              <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
-                <span className="shrink-0 flex items-center justify-center">
-                  {phoneIcon}
-                </span>
-                <input
-                  type="tel"
-                  defaultValue="(561) 639-8772"
-                  className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
-                  placeholder="(876) 555-0199"
-                />
+              {/* Phone field */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm text-dark-200">Phone Number</label>
+                <div className="flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[18px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all">
+                  <span className="shrink-0 flex items-center justify-center">
+                    {phoneIcon}
+                  </span>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
+                    placeholder="(876) 555-0199"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Save changes button (gold) */}
-            <Button
-              variant="gold"
-              type="submit"
-              className="w-full !rounded-[44px] !py-[18px] !text-[15px] mt-2"
-            >
-              Save changes
-            </Button>
+              {/* Save changes button (gold) */}
+              <Button
+                variant="gold"
+                type="submit"
+                className="w-full !rounded-[44px] !py-[18px] !text-[15px] mt-2"
+                disabled={updateProfileMutation.isPending}
+              >
+                {updateProfileMutation.isPending ? 'Saving...' : 'Save changes'}
+              </Button>
 
-            {/* Update password button (gray) */}
-            <Link
-              href="/dashboard/account/update-pass"
-              className="w-full flex items-center justify-center rounded-[44px] py-[18px] text-[15px] font-semibold text-dark-200 bg-[#1E1E1E] hover:bg-dark-400 transition-colors"
-            >
-              Update password
-            </Link>
-          </form>
+              {/* Update password button (gray) */}
+              <Link
+                href="/dashboard/account/update-pass"
+                className="w-full flex items-center justify-center rounded-[44px] py-[18px] text-[15px] font-semibold text-dark-200 bg-[#1E1E1E] hover:bg-dark-400 transition-colors"
+              >
+                Update password
+              </Link>
+            </form>
+          )}
         </div>
       </div>
     </>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Providers from "./providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.className} h-full`}>
       <body className="min-h-full bg-dark-bg text-dark-text antialiased">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

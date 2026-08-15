@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Header from '@/components/layout/Header';
 import AccountNav from '@/components/account/AccountNav';
 import { Button } from '@/components/shared/Button';
+import { useChangePasswordMutation } from '@/lib/api/hooks/useAuthHooks';
+import { useUIStore } from '@/store/uiStore';
 
 const lockIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#989898" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -31,11 +33,15 @@ const eyeOffIcon = (
 function PasswordField({
   label,
   placeholder,
+  value,
+  onChange,
   show,
   onToggle,
 }: {
   label: string;
   placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   show: boolean;
   onToggle: () => void;
 }) {
@@ -48,7 +54,10 @@ function PasswordField({
         </span>
         <input
           type={show ? 'text' : 'password'}
+          value={value}
+          onChange={onChange}
           placeholder={placeholder || '********'}
+          required
           className="w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none"
         />
         <button
@@ -64,46 +73,78 @@ function PasswordField({
 }
 
 export default function UpdatePassPage() {
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const changePasswordMutation = useChangePasswordMutation();
+  const addToast = useUIStore((s) => s.addToast);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      addToast('New password and confirm password do not match', 'error');
+      return;
+    }
+
+    changePasswordMutation.mutate(
+      { currentPassword, newPassword },
+      {
+        onSuccess: () => {
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+        },
+      }
+    );
+  };
+
   return (
     <>
       <Header />
-      <div className="px-8 pt-[50px] pb-[14px]">
+      <div className="px-4 sm:px-8 pt-[50px] pb-[14px]">
         <div className="flex flex-col items-start gap-[10px]">
           <h2 className="text-[24px] font-medium text-white leading-[1.3]">User Account</h2>
         </div>
       </div>
-      <div className="px-8 pb-[20px]">
+      <div className="px-4 sm:px-8 pb-[20px]">
         <AccountNav />
       </div>
 
       {/* Centered card container — full width of card */}
-      <div className="px-8 pb-10 flex justify-center">
-        <div className="bg-dark-600 rounded-[8px] p-8 w-full max-w-2xl flex flex-col gap-6">
+      <div className="px-4 sm:px-8 pb-10 flex justify-center">
+        <div className="bg-dark-600 rounded-[8px] p-6 sm:p-8 w-full max-w-2xl flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <h3 className="text-[20px] font-bold text-white leading-[1.3]">Update Password</h3>
             <p className="text-[14px] text-dark-200">Choose a strong password to keep your account secure.</p>
           </div>
 
-          <form className="flex flex-col gap-5">
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <PasswordField
               label="Current Password"
               placeholder="Enter current password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
               show={showCurrent}
               onToggle={() => setShowCurrent(!showCurrent)}
             />
             <PasswordField
               label="New Password"
               placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               show={showNew}
               onToggle={() => setShowNew(!showNew)}
             />
             <PasswordField
               label="Confirm New Password"
               placeholder="Confirm new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               show={showConfirm}
               onToggle={() => setShowConfirm(!showConfirm)}
             />
@@ -112,8 +153,9 @@ export default function UpdatePassPage() {
               variant="gold"
               type="submit"
               className="w-full !rounded-[44px] !py-[18px] !text-[15px] mt-2"
+              disabled={changePasswordMutation.isPending}
             >
-              Update Password
+              {changePasswordMutation.isPending ? 'Updating...' : 'Update Password'}
             </Button>
           </form>
         </div>

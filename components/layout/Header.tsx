@@ -1,6 +1,8 @@
 'use client';
 
 import { useUIStore } from '@/store/uiStore';
+import { useAuthStore } from '@/store/authStore';
+import { useProfileQuery } from '@/lib/api/hooks/useProfileHooks';
 
 export default function Header() {
   const today = new Date();
@@ -16,9 +18,24 @@ export default function Header() {
   const dateStr = `${dayName}, ${day} ${month} ${year}`;
 
   const toggleMobileSidebar = useUIStore((s) => s.toggleMobileSidebar);
+  const storeUser = useAuthStore((s) => s.user);
+  
+  // Also query profile to keep in sync
+  const { data: profile } = useProfileQuery();
+  const currentUser = profile || storeUser;
+
+  const fullName = currentUser
+    ? [currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || 'Client User'
+    : 'Client User';
+
+  const email = currentUser?.email || 'info@nexuspbs.net';
+
+  const initials = currentUser
+    ? `${currentUser.firstName?.[0] || 'C'}${currentUser.lastName?.[0] || 'U'}`.toUpperCase()
+    : 'CU';
 
   return (
-    <div className="bg-dark-600">
+    <div className="bg-dark-600 mt-12">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-4 pb-3 gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <button
@@ -47,14 +64,14 @@ export default function Header() {
             style={{ background: 'linear-gradient(180deg, #FCE688 0%, #D1A736 50%, #946E18 100%)' }}
             aria-label="Client avatar"
           >
-            CU
+            {initials}
           </div>
           <div className="hidden sm:flex flex-col gap-[2px] min-w-0">
             <span className="text-white leading-[1.2] text-[15px] font-medium truncate">
-              Client User
+              {fullName}
             </span>
             <span className="text-dark-100 leading-[1.2] text-[11px] font-medium truncate max-w-[160px]">
-              info@nexuspbs.net
+              {email}
             </span>
           </div>
         </div>

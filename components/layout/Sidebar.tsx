@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { NAV_ITEMS } from '@/lib/constants';
+import { useLogoutMutation } from '@/lib/api/hooks/useAuthHooks';
 
 interface SidebarProps {
   drawerClassName?: string;
@@ -12,12 +13,23 @@ interface SidebarProps {
 
 export default function Sidebar({ drawerClassName, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const logoutMutation = useLogoutMutation();
 
   const isActive = (href: string) => {
     if (href === '/dashboard/account/profile') {
       return pathname.startsWith('/dashboard/account');
     }
     return pathname.startsWith(href);
+  };
+
+  const handleLogout = () => {
+    if (onClose) onClose();
+    logoutMutation.mutate(undefined, {
+      onSettled: () => {
+        router.push('/login');
+      },
+    });
   };
 
   return (
@@ -95,10 +107,10 @@ export default function Sidebar({ drawerClassName, onClose }: SidebarProps) {
       <div className="flex-1" />
 
       <div className="mx-auto pb-6" style={{ width: '200px' }}>
-        <Link
-          href="/login"
-          onClick={onClose}
-          className="flex items-center gap-[10px] px-[14px] py-[8px] text-[14px] leading-[1.3] text-dark-200 font-normal hover:text-dark-100 transition-colors"
+        <button
+          onClick={handleLogout}
+          disabled={logoutMutation.isPending}
+          className="w-full flex items-center gap-[10px] px-[14px] py-[8px] text-[14px] leading-[1.3] text-dark-200 font-normal hover:text-dark-100 transition-colors cursor-pointer"
           aria-label="Logout"
         >
           <Image
@@ -109,8 +121,8 @@ export default function Sidebar({ drawerClassName, onClose }: SidebarProps) {
             className="brightness-0 sepia saturate-[6] hue-rotate-[5deg] drop-shadow-[0_0_4px_rgba(251,191,36,0.65)]"
             aria-hidden="true"
           />
-          <span>Logout</span>
-        </Link>
+          <span>{logoutMutation.isPending ? 'Logging out...' : 'Logout'}</span>
+        </button>
       </div>
     </aside>
   );

@@ -6,6 +6,7 @@ import { Button } from '@/components/shared/Button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useLoginMutation } from '@/lib/api/hooks/useAuthHooks';
 
 const envelopeIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#989898" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -43,9 +44,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  const loginMutation = useLoginMutation();
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/dashboard');
+    if (!email || !password) return;
+
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.push('/dashboard/property');
+        },
+      }
+    );
   };
 
   return (
@@ -138,8 +150,9 @@ export default function LoginPage() {
               size="lg"
               className="w-full mt-2 !rounded-[44px] !py-[22px] !text-[15px]"
               type="submit"
+              disabled={loginMutation.isPending}
             >
-              Secure Login
+              {loginMutation.isPending ? 'Signing in...' : 'Secure Login'}
             </Button>
           </form>
         </div>
