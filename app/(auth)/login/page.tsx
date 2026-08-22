@@ -111,6 +111,19 @@ export default function LoginPage() {
             <p className="text-dark-200 text-[15px]">Sign in to manage your properties, reports, and inspections.</p>
           </div>
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
+            {loginMutation.isError && (
+              <div className="p-3.5 rounded-xl bg-danger/15 border border-danger/40 text-danger text-sm flex items-start gap-3 transition-all animate-in fade-in slide-in-from-top-2">
+                <svg className="w-5 h-5 shrink-0 mt-0.5 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="flex-1">
+                  <p className="font-semibold text-white">Login Error</p>
+                  <p className="text-[13px] text-danger/90 mt-0.5 leading-relaxed">
+                    {loginMutation.error?.message || 'Login failed. Please check your credentials.'}
+                  </p>
+                </div>
+              </div>
+            )}
             <Input
               icon={envelopeIcon}
               label="Email"

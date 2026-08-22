@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore';
+import { extractErrorMessage } from '@/lib/utils';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
@@ -63,11 +64,15 @@ export async function refreshAuthToken(): Promise<string> {
 // Response Interceptor: Handle 401 Silent Refresh
 apiClient.interceptors.response.use(
   (response) => response,
-  async (error: AxiosError<{ message?: string; success?: boolean }>) => {
+  async (error: AxiosError<any>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (!error.response || error.response.status !== 401) {
-      const customMessage = error.response?.data?.message || error.message || 'An unexpected error occurred';
+    if (!error.response) {
+      return Promise.reject(new Error(error.message || 'Network error. Please check your connection.'));
+    }
+
+    if (error.response.status !== 401) {
+      const customMessage = extractErrorMessage(error.response.data, error.message || 'An unexpected error occurred');
       return Promise.reject(new Error(customMessage));
     }
 
@@ -75,7 +80,7 @@ apiClient.interceptors.response.use(
       originalRequest.url?.includes('/auth/login') ||
       originalRequest.url?.includes('/auth/refresh-token')
     ) {
-      let customMessage = error.response?.data?.message || 'Authentication failed';
+      let customMessage = extractErrorMessage(error.response.data, 'Authentication failed');
       if (customMessage === 'INVALID_CREDENTIALS') {
         customMessage = 'Invalid email or password. Please check your credentials.';
       }

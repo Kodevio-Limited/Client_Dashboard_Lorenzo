@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
-import Toast from '@/components/layout/Toast';
 import { useUIStore } from '@/store/uiStore';
 
 export default function DashboardLayout({
@@ -51,7 +50,6 @@ export default function DashboardLayout({
       <main className="flex-1 overflow-y-auto bg-bg scrollbar-thin">
         {children}
       </main>
-      <Toast />
     </div>
   );
 }
