@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Input } from '@/components/shared/Input';
 import { Button } from '@/components/shared/Button';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/lib/api/hooks/useAuthHooks';
@@ -61,16 +60,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg flex relative">
+    <div className="min-h-screen bg-bg flex flex-col lg:flex-row relative">
       {/* Mobile: full-screen background image with dark overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center lg:hidden"
         style={{ backgroundImage: 'url(/assets/login.jpg)' }}
       />
-      <div className="absolute inset-0 bg-black/40 lg:hidden" />
+      <div className="absolute inset-0 bg-black/60 lg:hidden" />
 
-      {/* Desktop: left side background image with Jamaica/Nexus overlay */}
-      <div className="hidden lg:block w-[983px] shrink-0 relative overflow-hidden">
+      {/* Desktop: left side hero image */}
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden min-h-screen">
         <div
           className="absolute inset-0"
           style={{
@@ -79,51 +78,17 @@ export default function LoginPage() {
             backgroundPosition: 'center',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/10 to-transparent flex flex-col justify-center px-20 lg:px-24 py-16">
-          <p className="text-gold-mid text-sm font-semibold tracking-[0.15em] uppercase mb-3">
-            Nexus Property Verification
-          </p>
-          <h2 className="text-white text-[38px] font-bold leading-[1.2] mb-3">
-            Jamaica's Trusted<br />Inspection Partner
-          </h2>
-          <p className="text-white/70 text-[14px] leading-relaxed max-w-sm">
-            Professional property verification, local representation, and inspection services across Jamaica.
-          </p>
-        </div>
       </div>
 
       {/* Right side form */}
-      <div className="flex-1 flex items-start lg:items-center justify-center px-4 sm:px-8 lg:px-16 relative z-10 pt-10 sm:pt-16 lg:pt-0 pb-8 lg:pb-0">
-        <div className="w-full max-w-[520px] bg-dark-600/90 lg:bg-transparent backdrop-blur-sm rounded-[20px] p-8 lg:p-0">
-          <div className="flex justify-center mb-6">
-            <Image
-              src="/assets/sidebar-logo.png"
-              alt="Nexus"
-              width={100}
-              height={150}
-              priority
-              unoptimized
-              className="object-contain"
-            />
-          </div>
+      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-16 xl:px-24 relative z-10 py-12 lg:py-0">
+        <div className="w-full max-w-[460px] bg-dark-600/90 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none rounded-[24px] p-8 sm:p-10 lg:p-0">
           <div className="mb-8 text-center">
-            <h1 className="text-[38px] font-bold text-white leading-[1.2] mb-2">Welcome to Your Client Portal</h1>
-            <p className="text-dark-200 text-[15px]">Sign in to manage your properties, reports, and inspections.</p>
+            <h1 className="text-3xl sm:text-[36px] font-bold text-white leading-tight mb-2.5">Welcome Back</h1>
+            <p className="text-dark-200 text-sm sm:text-[15px]">Enter your credentials to access your dashboard.</p>
           </div>
+
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
-            {loginMutation.isError && (
-              <div className="p-3.5 rounded-xl bg-danger/15 border border-danger/40 text-danger text-sm flex items-start gap-3 transition-all animate-in fade-in slide-in-from-top-2">
-                <svg className="w-5 h-5 shrink-0 mt-0.5 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div className="flex-1">
-                  <p className="font-semibold text-white">Login Error</p>
-                  <p className="text-[13px] text-danger/90 mt-0.5 leading-relaxed">
-                    {loginMutation.error?.message || 'Login failed. Please check your credentials.'}
-                  </p>
-                </div>
-              </div>
-            )}
             <Input
               icon={envelopeIcon}
               label="Email"
@@ -131,6 +96,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email..."
+              autoComplete="email"
               required
             />
             <div className="flex flex-col gap-1.5">
@@ -140,7 +106,8 @@ export default function LoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="********"
+                placeholder="••••••••"
+                autoComplete="current-password"
                 required
                 rightElement={
                   <button
@@ -161,7 +128,7 @@ export default function LoginPage() {
             <Button
               variant="gold"
               size="lg"
-              className="w-full mt-2 !rounded-[44px] !py-[22px] !text-[15px]"
+              className="w-full mt-2 !rounded-full !py-3.5 !text-[15px] font-semibold tracking-wide cursor-pointer transition-all duration-200 hover:brightness-105 active:brightness-95"
               type="submit"
               disabled={loginMutation.isPending}
             >

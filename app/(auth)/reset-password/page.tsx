@@ -38,10 +38,10 @@ const eyeOffIcon = (
   </svg>
 );
 
-function SetNewPassContent() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const tokenFromUrl = searchParams.get('token') || '';
-  
+
   const [token, setToken] = useState(tokenFromUrl);
   const [pass1, setPass1] = useState('');
   const [pass2, setPass2] = useState('');
@@ -197,10 +197,10 @@ function SetNewPassContent() {
   );
 }
 
-export default function SetNewPassPage() {
+export default function ResetPasswordPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-bg flex items-center justify-center text-dark-200">Loading...</div>}>
-      <SetNewPassContent />
+      <ResetPasswordContent />
     </Suspense>
   );
 }

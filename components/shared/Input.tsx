@@ -15,22 +15,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     if (icon) {
       return (
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-2">
           {label && (
-            <label htmlFor={inputId} className="text-sm text-dark-200">
+            <label htmlFor={inputId} className="text-sm text-dark-200 font-normal">
               {label}
             </label>
           )}
           <div
-            className={`flex items-center gap-4 bg-[#1E1E1E] rounded-[36px] px-[22px] py-[22px] focus-within:ring-2 focus-within:ring-gold-focus/60 transition-all ${error ? 'ring-2 ring-danger' : ''}`}
+            className={`flex items-center gap-3.5 bg-[#1E1E1E] rounded-full px-5 py-3.5 sm:px-6 sm:py-4 focus-within:ring-1 focus-within:ring-gold-focus/50 focus-within:border-gold-focus/40 border border-[#2A2A2A]/50 transition-all ${error ? '!border-danger ring-1 ring-danger' : ''}`}
           >
-            <span className="shrink-0 flex items-center justify-center w-9 h-9">
+            <span className="shrink-0 flex items-center justify-center text-dark-200">
               {icon}
             </span>
             <input
               ref={ref}
               id={inputId}
-              className={`w-full bg-transparent border-none text-sm text-white placeholder-dark-200/50 focus:outline-none ${className}`}
+              className={`w-full bg-transparent border-0 text-[15px] text-white placeholder:text-dark-200/50 focus:outline-none focus:ring-0 p-0 ${className}`}
               {...props}
             />
             {rightElement && (

@@ -70,12 +70,13 @@ export default function PhotosPage() {
           mediaItems &&
           mediaItems.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {mediaItems.map((item, idx) => {
+              {mediaItems.map((item) => {
                 const fileUrl =
                   item.fileUrl ||
                   item.attachment?.url ||
-                  `/assets/photo-${(idx % 3) + 1}.svg`;
+                  '';
 
+                const isRealMedia = fileUrl && !fileUrl.includes('photo-') && !fileUrl.endsWith('.svg');
                 const isVideo = item.type === 'VIDEO';
 
                 const label = isVideo ? 'Video' : 'Image';
@@ -90,52 +91,57 @@ export default function PhotosPage() {
                 return (
                   <div
                     key={item.id}
-                    className="group relative aspect-[4/3] rounded-[6px] overflow-hidden bg-dark-500 cursor-pointer flex flex-col justify-between p-6 border border-dark-400/20"
-                    onClick={() =>
-                      window.open(
-                        fileUrl,
-                        '_blank',
-                        'noopener,noreferrer',
-                      )
-                    }
+                    className="group relative aspect-[4/3] rounded-[10px] overflow-hidden bg-gradient-to-br from-[#1A221C] to-[#0D120E] cursor-pointer flex flex-col justify-between p-6 border border-[#2D3830]/50 hover:border-gold-mid/40 shadow-lg transition-all"
+                    onClick={() => {
+                      if (fileUrl) {
+                        window.open(
+                          fileUrl,
+                          '_blank',
+                          'noopener,noreferrer',
+                        );
+                      }
+                    }}
                   >
-                    {isVideo ? (
-                      <video
-                        src={fileUrl}
-                        muted
-                        playsInline
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    ) : (
-                      <img
-                        src={fileUrl}
-                        alt={title}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
+                    {isRealMedia && (
+                      isVideo ? (
+                        <video
+                          src={fileUrl}
+                          muted
+                          playsInline
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      ) : (
+                        <img
+                          src={fileUrl}
+                          alt={title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      )
                     )}
 
                     <div className="absolute inset-0 bg-black/45 transition-colors group-hover:bg-black/60 z-0" />
 
                     <div className="relative z-10 flex flex-col justify-between h-full w-full">
                       <div>
-                        <span className="text-[12px] uppercase font-bold text-white/60 tracking-wider">
+                        <span className="text-[11px] uppercase font-bold text-gold-mid tracking-wider bg-black/40 px-2 py-0.5 rounded-full border border-gold-mid/20 w-fit inline-block">
                           {label}
                         </span>
 
-                        <h3 className="text-[20px] font-bold text-white mt-1 leading-tight">
+                        <h3 className="text-[18px] sm:text-[20px] font-bold text-white mt-2 leading-tight">
                           {title}
                         </h3>
                       </div>
 
                       {isVideo && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/20">
+                          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all">
                             {playIcon}
                           </div>
                         </div>
                       )}
 
-                      <span className="text-[14px] text-white/70 font-semibold mt-auto">
+                      <span className="text-[13px] sm:text-[14px] text-white/80 font-semibold mt-auto flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gold-mid" />
                         {propertyName}
                       </span>
                     </div>

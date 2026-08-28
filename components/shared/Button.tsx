@@ -11,13 +11,13 @@ const variants = {
   primary: 'bg-dark-500 text-white border border-dark-400 hover:bg-dark-600',
   secondary: 'bg-dark-500 text-white border border-dark-400 hover:bg-dark-600',
   ghost: 'bg-transparent text-dark-200 hover:text-white',
-  gold: 'text-bg font-medium',
+  gold: 'text-[#1A1100] font-semibold hover:brightness-105 active:brightness-95 shadow-md shadow-gold-mid/10',
 } as const;
 
 const sizes = {
   sm: 'px-3 py-1.5 text-xs',
   md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-base',
+  lg: 'px-6 py-3.5 text-base',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

@@ -6,6 +6,7 @@ export interface LoginDto {
 }
 
 export interface LoginResponse {
+  success?: boolean;
   message: string;
   data: {
     userId: number;
@@ -13,9 +14,24 @@ export interface LoginResponse {
   };
 }
 
+export interface ForgotPasswordDto {
+  email: string;
+}
+
+export interface ResetPasswordDto {
+  token: string;
+  newPassword: string;
+}
+
 export interface ChangePasswordDto {
   currentPassword: string;
   newPassword: string;
+}
+
+export interface ApiResponse<T = any> {
+  success?: boolean;
+  message: string;
+  data?: T;
 }
 
 export const authService = {
@@ -24,25 +40,23 @@ export const authService = {
     return res.data;
   },
 
-  async logout(): Promise<void> {
-    await apiClient.post('/auth/logout');
-  },
-
-  async forgotPassword(email: string): Promise<{ message: string }> {
-    const res = await apiClient.post<{ message: string }>('/auth/forgot-password', { email });
+  async logout(): Promise<ApiResponse> {
+    const res = await apiClient.post<ApiResponse>('/auth/logout');
     return res.data;
   },
 
-  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
-    const res = await apiClient.post<{ message: string }>('/auth/reset-password', {
-      token,
-      newPassword,
-    });
+  async forgotPassword(email: string): Promise<ApiResponse> {
+    const res = await apiClient.post<ApiResponse>('/auth/forgot-password', { email });
     return res.data;
   },
 
-  async changePassword(dto: ChangePasswordDto): Promise<{ message: string }> {
-    const res = await apiClient.post<{ message: string }>('/auth/change-password', dto);
+  async resetPassword(dto: ResetPasswordDto): Promise<ApiResponse> {
+    const res = await apiClient.post<ApiResponse>('/auth/reset-password', dto);
+    return res.data;
+  },
+
+  async changePassword(dto: ChangePasswordDto): Promise<ApiResponse> {
+    const res = await apiClient.post<ApiResponse>('/auth/change-password', dto);
     return res.data;
   },
 };

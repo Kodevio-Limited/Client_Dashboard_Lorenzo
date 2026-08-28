@@ -50,10 +50,10 @@ export default function Header() {
             </svg>
           </button>
           <div className="flex flex-col items-start gap-0.5 min-w-0">
-            <h1 className="text-[16px] sm:text-[20px] font-medium text-white leading-[1.3] truncate">
-              Good Morning
+            <h1 className="text-[17px] sm:text-[21px] font-bold text-white leading-[1.3] truncate">
+              Good Morning {currentUser?.firstName ? currentUser.firstName : ''}
             </h1>
-            <span className="text-[11px] sm:text-[13px] font-normal text-white/70 leading-[1.3] truncate max-w-[200px] sm:max-w-none">
+            <span className="text-[12px] sm:text-[13px] font-normal text-white/70 leading-[1.3] truncate max-w-[200px] sm:max-w-none">
               {dateStr}
             </span>
           </div>
