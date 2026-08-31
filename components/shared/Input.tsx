@@ -30,7 +30,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <input
               ref={ref}
               id={inputId}
-              className={`w-full bg-transparent border-0 text-[15px] text-white placeholder:text-dark-200/50 focus:outline-none focus:ring-0 p-0 ${className}`}
+              className={`w-full bg-transparent border-0 text-base sm:text-[15px] text-white placeholder:text-dark-200/50 focus:outline-none focus:ring-0 p-0 ${className}`}
               {...props}
             />
             {rightElement && (
@@ -55,7 +55,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
-            className={`w-full bg-bg border ${error ? 'border-danger' : 'border-dark-400'} rounded-[4px] px-3 py-2.5 text-sm text-white placeholder-dark-200/50 focus:outline-none focus:ring-2 focus:ring-gold-focus/60 focus:border-gold-focus transition-colors pr-10 ${className}`}
+            className={`w-full bg-bg border ${error ? 'border-danger' : 'border-dark-400'} rounded-[4px] px-3 py-2.5 text-base sm:text-sm text-white placeholder-dark-200/50 focus:outline-none focus:ring-2 focus:ring-gold-focus/60 focus:border-gold-focus transition-colors pr-10 ${className}`}
             {...props}
           />
           {rightElement && (

@@ -35,12 +35,12 @@ export default function Header() {
     : 'CU';
 
   return (
-    <div className="bg-dark-600 mt-12">
-      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-4 pb-3 gap-3">
+    <div className="bg-dark-600 border-b border-[#282828] lg:border-b-0 lg:rounded-b-none">
+      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={toggleMobileSidebar}
-            className="lg:hidden text-white hover:text-amber-300 transition-colors p-1.5 -ml-1.5"
+            className="lg:hidden text-white hover:text-gold-mid transition-colors p-1.5 -ml-1.5 cursor-pointer shrink-0"
             aria-label="Toggle sidebar"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

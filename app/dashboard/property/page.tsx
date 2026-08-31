@@ -102,9 +102,9 @@ export default function PropertyPage() {
               return (
                 <div
                   key={property.id}
-                  className="bg-dark-600 border border-[#282828] hover:border-gold-mid/30 rounded-[10px] p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 transition-all"
+                  className="bg-dark-600 border border-[#282828] hover:border-gold-mid/30 rounded-[10px] p-4 sm:p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 transition-all"
                 >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 min-w-0">
                     {/* Modern luxury thumbnail fallback */}
                     <PropertyThumbnail
                       src={imageSrc}
@@ -119,18 +119,18 @@ export default function PropertyPage() {
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
                           {pinIcon}
-                          <span>{fullAddress}</span>
+                          <span className="truncate">{fullAddress}</span>
                         </div>
                         <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
                           {calendarIcon}
-                          <span>Verified: {verificationDate}</span>
+                          <span className="truncate">Verified: {verificationDate}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Action buttons matching Figma */}
-                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3">
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 shrink-0">
                     <Link
                       href={`/dashboard/reports?propertyId=${property.id}`}
                       className="rounded-[6px] px-5 sm:px-6 py-2.5 text-[13px] sm:text-[14px] font-semibold text-[#1A1100] shadow-md hover:brightness-105 active:scale-[0.98] transition-all flex items-center gap-2 flex-1 sm:flex-none justify-center"

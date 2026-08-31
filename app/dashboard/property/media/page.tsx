@@ -84,8 +84,8 @@ function PropertyMediaContent() {
           No photos or videos recorded for this property yet.
         </div>
       ) : (
-        <div className="bg-dark-600 rounded-[8px] p-6 max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-dark-600 rounded-[8px] p-4 sm:p-6 max-w-6xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {propertyMedia.map((item) => {
               const fileUrl =
                 item.fileUrl ||

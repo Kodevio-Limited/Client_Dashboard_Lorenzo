@@ -81,8 +81,8 @@ export default function LoginPage() {
       </div>
 
       {/* Right side form */}
-      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-16 xl:px-24 relative z-10 py-12 lg:py-0">
-        <div className="w-full max-w-[460px] bg-dark-600/90 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none rounded-[24px] p-8 sm:p-10 lg:p-0">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-12 lg:px-16 xl:px-24 relative z-10 py-8 sm:py-12 lg:py-0">
+        <div className="w-full max-w-[460px] bg-dark-600/90 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none rounded-[24px] p-6 sm:p-10 lg:p-0">
           <div className="mb-8 text-center">
             <h1 className="text-3xl sm:text-[36px] font-bold text-white leading-tight mb-2.5">Welcome Back</h1>
             <p className="text-dark-200 text-sm sm:text-[15px]">Enter your credentials to access your dashboard.</p>
