@@ -35,7 +35,7 @@ export default function Header() {
     : 'CU';
 
   return (
-    <div className="bg-dark-600 border-b border-[#282828] lg:border-b-0 lg:rounded-b-none">
+    <div className="bg-dark-600 border-b border-[#282828]">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <button

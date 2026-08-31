@@ -1,7 +1,7 @@
 export const NAV_ITEMS = [
   { label: 'My Properties', href: '/dashboard/property', icon: '/assets/icons/properties-icon.svg' },
   { label: 'Reports', href: '/dashboard/reports', icon: '/assets/icons/reports-icon.svg' },
-  { label: 'Photos', href: '/dashboard/photos', icon: '/assets/icons/media-icon.svg' },
+  { label: 'Media', href: '/dashboard/media', icon: '/assets/icons/media-icon.svg' },
   { label: 'Profile', href: '/dashboard/account/profile', icon: '/assets/icons/user-accounts-icon.svg' },
 ] as const;
 

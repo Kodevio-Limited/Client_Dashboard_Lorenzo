@@ -63,8 +63,8 @@ export default function Sidebar({ drawerClassName, onClose }: SidebarProps) {
       ),
     },
     {
-      label: 'Photos',
-      href: '/dashboard/photos',
+      label: 'Media',
+      href: '/dashboard/media',
       icon: (active: boolean) => (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0">
           <circle cx="16" cy="8" r="2" fill={active ? '#1A1100' : 'currentColor'} />
@@ -95,8 +95,8 @@ export default function Sidebar({ drawerClassName, onClose }: SidebarProps) {
 
   return (
     <aside
-      className={`w-[260px] bg-dark-600 flex flex-col shrink-0 h-screen overflow-y-auto ${drawerClassName || ''}`}
-      style={{ borderRadius: drawerClassName ? '0 16px 16px 0' : '16px' }}
+      className={`w-[260px] bg-dark-600 flex flex-col shrink-0 h-screen overflow-y-auto border-r border-[#282828] ${drawerClassName || ''}`}
+      style={{ borderRadius: drawerClassName ? '0 16px 16px 0' : '0' }}
     >
       {onClose && (
         <div className="flex justify-end px-4 pt-4">
