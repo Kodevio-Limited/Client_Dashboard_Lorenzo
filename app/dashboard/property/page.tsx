@@ -97,7 +97,7 @@ export default function PropertyPage() {
                   : null;
 
               const fullAddress = [property.city, property.parish].filter(Boolean).join(', ') || 'Kingston, Jamaica';
-              const inspectionDate = formatDate(property.nextVisitDate || property.updatedAt || property.createdAt);
+              const verificationDate = formatDate(property.nextVisitDate || property.updatedAt || property.createdAt);
 
               return (
                 <div
@@ -123,7 +123,7 @@ export default function PropertyPage() {
                         </div>
                         <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
                           {calendarIcon}
-                          <span>Inspected: {inspectionDate}</span>
+                          <span>Verified: {verificationDate}</span>
                         </div>
                       </div>
                     </div>

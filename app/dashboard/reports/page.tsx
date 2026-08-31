@@ -47,7 +47,7 @@ export default function ReportsPage() {
         <div className="flex flex-col items-start gap-2 sm:gap-[10px] mb-6">
           <h2 className="text-[22px] sm:text-[26px] font-bold text-white leading-[1.3] tracking-wide">Reports</h2>
           <p className="text-[13px] sm:text-[14px] text-dark-200 leading-[1.3]">
-            View and download your finalized property inspection reports.
+            View and download your finalized property verification and documentation reports.
           </p>
         </div>
 
@@ -67,7 +67,7 @@ export default function ReportsPage() {
 
         {!isLoading && !isError && reports && reports.length === 0 && (
           <div className="bg-dark-600 rounded-[10px] p-8 text-center text-dark-200 text-sm">
-            No inspection reports available for your properties yet.
+            No property verification or documentation reports available yet.
           </div>
         )}
 
@@ -92,7 +92,7 @@ export default function ReportsPage() {
                       </h3>
                       <div className="flex items-center gap-2 text-dark-200 text-[13px] sm:text-[14px]">
                         {calendarIcon}
-                        <span>Inspected: {formatDate(report.visitDate)}</span>
+                        <span>Verified: {formatDate(report.visitDate)}</span>
                       </div>
                       {report.property?.name && (
                         <div className="text-[12px] text-dark-100 font-medium">

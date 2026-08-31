@@ -63,7 +63,7 @@ function PropertyHistoryContent() {
           {property?.name || 'Property History'}
         </h2>
         <span className="text-[14px] text-dark-200 leading-[1.3]">
-          Recent Activity & Inspection History
+          Recent Activity & Verification History
         </span>
       </div>
 
@@ -71,7 +71,7 @@ function PropertyHistoryContent() {
         <div className="bg-dark-600 rounded-[8px] p-6 animate-pulse h-32" />
       ) : !reports || reports.length === 0 ? (
         <div className="bg-dark-600 rounded-[8px] p-8 text-center text-dark-200 text-sm">
-          No history or past inspection reports recorded for this property yet.
+          No history or past verification reports recorded for this property yet.
         </div>
       ) : (
         <div className="bg-dark-600 rounded-[8px] p-6 max-w-6xl">
@@ -90,7 +90,7 @@ function PropertyHistoryContent() {
                   </h3>
                   <div className="flex items-center gap-2 text-dark-200 text-[13px] mt-1.5">
                     {calendarIcon}
-                    <span>Inspected: {formatDate(report.visitDate)}</span>
+                    <span>Verified: {formatDate(report.visitDate)}</span>
                   </div>
                 </div>
                 {report.pdfUrl && (

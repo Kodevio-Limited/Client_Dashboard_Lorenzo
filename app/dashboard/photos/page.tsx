@@ -35,7 +35,7 @@ export default function PhotosPage() {
           </h2>
 
           <span className="text-[14px] text-dark-200 leading-[1.3]">
-            View media assets captured during recent inspections.
+            View media assets captured during recent property verification visits.
           </span>
         </div>
 
@@ -61,7 +61,7 @@ export default function PhotosPage() {
           mediaItems &&
           mediaItems.length === 0 && (
             <div className="bg-dark-600 rounded-[8px] p-8 text-center text-dark-200 text-sm">
-              No inspection photos or videos found for your properties.
+              No verification photos or videos found for your properties.
             </div>
           )}
 
@@ -83,7 +83,7 @@ export default function PhotosPage() {
 
                 const title =
                   item.title ||
-                  (isVideo ? 'Inspection Video' : 'Inspection Photo');
+                  (isVideo ? 'Verification Video' : 'Verification Photo');
 
                 const propertyName =
                   item.property?.name || 'Property Media';
